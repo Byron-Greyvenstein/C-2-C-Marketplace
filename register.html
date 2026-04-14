@@ -4,24 +4,170 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #f4f4f4, #e4ecf3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+
+        .form-container {
+            width: 100%;
+            max-width: 520px;
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.12);
+            padding: 28px;
+        }
+
+        h2 {
+            color: #1f2937;
+            margin-bottom: 18px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            background: #f8fafc;
+        }
+
+        button[type="submit"] {
+            width: 100%;
+            border: none;
+            border-radius: 6px;
+            padding: 12px;
+            background: #0f766e;
+            color: #ffffff;
+            font-size: 0.95rem;
+            cursor: pointer;
+            margin-top: 4px;
+        }
+
+        .switch-link {
+            margin-top: 14px;
+            text-align: center;
+            color: #475569;
+            font-size: 0.9rem;
+        }
+
+        .switch-link a {
+            color: #0f766e;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #166534;
+            color: #ffffff;
+            padding: 12px 14px;
+            border-radius: 8px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(-8px);
+            transition: opacity 0.2s ease, transform 0.2s ease;
+            max-width: 320px;
+            font-size: 0.9rem;
+            z-index: 1000;
+        }
+
+        .toast.show {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+        }
+
+        .toast.error {
+            background: #991b1b;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.45);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            z-index: 999;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal {
+            width: 100%;
+            max-width: 420px;
+            background: #ffffff;
+            border-radius: 10px;
+            padding: 22px;
+            box-shadow: 0 14px 36px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal h3 {
+            color: #1f2937;
+            margin-bottom: 8px;
+        }
+
+        .modal p {
+            color: #475569;
+            font-size: 0.92rem;
+            margin-bottom: 16px;
+            line-height: 1.4;
+        }
+
+        .auth-btn {
+            width: 100%;
+            border: none;
+            border-radius: 6px;
+            padding: 11px;
+            background: #1f2937;
+            color: #ffffff;
+            cursor: pointer;
+            font-size: 0.95rem;
+        }
+    </style>
 </head>
 <body>
 
     <div class="form-container">
     <h2>Register</h2>
  
-    <form action="" method="POST">
+    <form id="register-form" action="" method="POST">
  
         <div class="form-group">
-            <input type="text" name="name" placeholder="Enter Name">
+            <input type="text" id="name" name="name" placeholder="Enter Name" required>
         </div>
  
         <div class="form-group">
-            <input type="text" name="email" placeholder="Enter Email">
+            <input type="email" id="email" name="email" placeholder="Enter Email" required>
         </div>
 
         <div class ="form-group">
-            <input type="tel" name="cellnum" placeholder="Enter Cellphone number">
+            <input type="tel" id="cellnum" name="cellnum" placeholder="Enter Cellphone number" required>
         </div>
 
         <div class="form-group">
@@ -46,19 +192,19 @@
         </div>
 
         <div class="form-group">
-            <input type="text" name="city" placeholder="Enter City">
+            <input type="text" id="city" name="city" placeholder="Enter City" required>
         </div>
 
         <div class="form-group">
-            <input type="text" name="address" placeholder="Enter Address">
+            <input type="text" id="address" name="address" placeholder="Enter Address" required>
         </div>
 
         <div class="form-group">
-            <input type="password" name="password" placeholder="Enter Password">
+            <input type="password" id="password" name="password" placeholder="Enter Password" required>
         </div>
  
         <div class="form-group">
-            <input type="password" name="confirm_password" placeholder="Confirm Password">
+            <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm Password" required>
         </div>
  
         <button type="submit">Register</button>
@@ -69,6 +215,91 @@
         <a href="login.html">Login</a>
     </div>
 </div>
+
+<div id="toast" class="toast"></div>
+
+<div id="auth-modal" class="modal-overlay">
+    <div class="modal">
+        <h3>Email Authentication</h3>
+        <p>Your account has been created. Click authenticate to simulate email verification and continue.</p>
+        <button id="authenticate-btn" class="auth-btn" type="button">Authenticate</button>
+    </div>
+</div>
+
+<script>
+    const registerForm = document.getElementById('register-form');
+    const toast = document.getElementById('toast');
+    const authModal = document.getElementById('auth-modal');
+    const authenticateBtn = document.getElementById('authenticate-btn');
+
+    function showToast(message, type) {
+        toast.textContent = message;
+        toast.className = 'toast show' + (type ? ' ' + type : '');
+        setTimeout(function () {
+            toast.className = 'toast';
+        }, 3200);
+    }
+
+    function getUsers() {
+        const raw = localStorage.getItem('fakeUsers');
+        if (!raw) {
+            return [];
+        }
+        try {
+            return JSON.parse(raw);
+        } catch (error) {
+            return [];
+        }
+    }
+
+    function saveUsers(users) {
+        localStorage.setItem('fakeUsers', JSON.stringify(users));
+    }
+
+    registerForm.addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        const name = document.getElementById('name').value.trim();
+        const email = document.getElementById('email').value.trim().toLowerCase();
+        const cellnum = document.getElementById('cellnum').value.trim();
+        const city = document.getElementById('city').value.trim();
+        const address = document.getElementById('address').value.trim();
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirm_password').value;
+
+        if (password !== confirmPassword) {
+            showToast('Passwords do not match. Please try again.', 'error');
+            return;
+        }
+
+        const users = getUsers();
+        const exists = users.some(function (user) {
+            return user.email === email;
+        });
+
+        if (exists) {
+            showToast('Email already registered. Please login instead.', 'error');
+            return;
+        }
+
+        users.push({
+            name: name,
+            email: email,
+            cellnum: cellnum,
+            city: city,
+            address: address,
+            password: password
+        });
+        saveUsers(users);
+
+        showToast('You have successfully been registered.');
+        authModal.classList.add('show');
+    });
+
+    authenticateBtn.addEventListener('click', function () {
+        window.location.href = 'option.html';
+    });
+</script>
     
 </body>
 </html>
