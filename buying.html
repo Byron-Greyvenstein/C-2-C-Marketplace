@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Marketplace – TradeSA</title>
+	<style>
+		* {
+			box-sizing: border-box;
+			margin: 0;
+			padding: 0;
+		}
+
+		body {
+			font-family: Arial, sans-serif;
+			min-height: 100vh;
+			background: #f3f4f6;
+		}
+
+		/* ── HEADER ─────────────────────────────────────── */
+		header {
+			position: sticky;
+			top: 0;
+			z-index: 100;
+			background: #1f2937;
+			color: #ffffff;
+			padding: 0 20px;
+			display: flex;
+			align-items: center;
+			gap: 16px;
+			height: 62px;
+			box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+		}
+
+		.brand {
+			font-size: 1.35rem;
+			font-weight: bold;
+			color: #34d399;
+			white-space: nowrap;
+			flex-shrink: 0;
+		}
+
+		.search-bar {
+			display: flex;
+			flex: 1;
+			max-width: 640px;
+		}
+
+		.search-bar input {
+			flex: 1;
+			padding: 9px 14px;
+			border: none;
+			border-radius: 6px 0 0 6px;
+			font-size: 0.95rem;
+			outline: none;
+			background: #f9fafb;
+			color: #111827;
+		}
+
+		.search-bar button {
+			padding: 9px 14px;
+			background: #0f766e;
+			color: #ffffff;
+			border: none;
+			border-radius: 0 6px 6px 0;
+			cursor: pointer;
+			font-size: 1rem;
+		}
+
+		.header-right {
+			display: flex;
+			align-items: center;
+			gap: 10px;
+			margin-left: auto;
+			flex-shrink: 0;
+		}
+
+		.profile-wrap {
+			display: flex;
+			align-items: center;
+			gap: 7px;
+			color: #e2e8f0;
+			font-size: 0.9rem;
+		}
+
+		.profile-icon {
+			width: 34px;
+			height: 34px;
+			border-radius: 50%;
+			background: #0f766e;
+			display: grid;
+			place-items: center;
+			font-weight: bold;
+			font-size: 0.95rem;
+			color: #ffffff;
+			flex-shrink: 0;
+		}
+
+		.header-btn {
+			border: 1px solid #4b5563;
+			border-radius: 6px;
+			padding: 7px 12px;
+			background: transparent;
+			color: #e2e8f0;
+			font-size: 0.85rem;
+			cursor: pointer;
+		}
+
+		.header-btn:hover {
+			background: #374151;
+		}
+
+		/* ── LAYOUT ──────────────────────────────────────── */
+		.page-body {
+			display: flex;
+			min-height: calc(100vh - 62px);
+		}
+
+		/* ── SIDEBAR ─────────────────────────────────────── */
+		.sidebar {
+			width: 210px;
+			flex-shrink: 0;
+			background: #ffffff;
+			padding: 18px 12px;
+			border-right: 1px solid #e5e7eb;
+		}
+
+		.sidebar h3 {
+			font-size: 0.75rem;
+			text-transform: uppercase;
+			letter-spacing: 0.06em;
+			color: #9ca3af;
+			margin-bottom: 8px;
+			padding-left: 4px;
+		}
+
+		.sidebar ul {
+			list-style: none;
+			margin-bottom: 22px;
+		}
+
+		.sidebar ul li button {
+			width: 100%;
+			text-align: left;
+			background: none;
+			border: none;
+			padding: 8px 10px;
+			border-radius: 6px;
+			font-size: 0.88rem;
+			color: #374151;
+			cursor: pointer;
+		}
+
+		.sidebar ul li button:hover,
+		.sidebar ul li button.active {
+			background: #f0fdf4;
+			color: #0f766e;
+			font-weight: bold;
+		}
+
+		/* ── MAIN CONTENT ────────────────────────────────── */
+		.main {
+			flex: 1;
+			padding: 20px;
+		}
+
+		.results-bar {
+			font-size: 0.88rem;
+			color: #6b7280;
+			margin-bottom: 14px;
+		}
+
+		.grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+			gap: 16px;
+		}
+
+		/* ── PRODUCT CARD ────────────────────────────────── */
+		.card {
+			background: #ffffff;
+			border-radius: 10px;
+			box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+			overflow: hidden;
+			display: flex;
+			flex-direction: column;
+			transition: box-shadow 0.15s ease, transform 0.15s ease;
+		}
+
+		.card:hover {
+			box-shadow: 0 6px 18px rgba(0,0,0,0.13);
+			transform: translateY(-2px);
+		}
+
+		.card-img {
+			width: 100%;
+			height: 148px;
+			background: #f1f5f9;
+			display: grid;
+			place-items: center;
+			font-size: 2.8rem;
+		}
+
+		.card-body {
+			padding: 12px;
+			flex: 1;
+			display: flex;
+			flex-direction: column;
+			gap: 4px;
+		}
+
+		.card-title {
+			font-size: 0.93rem;
+			font-weight: bold;
+			color: #1f2937;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+
+		.card-location {
+			font-size: 0.78rem;
+			color: #9ca3af;
+		}
+
+		.card-condition {
+			font-size: 0.78rem;
+			color: #6b7280;
+		}
+
+		.card-price {
+			font-size: 1.05rem;
+			font-weight: bold;
+			color: #0f766e;
+			margin-top: 4px;
+		}
+
+		.card-buy {
+			margin-top: 8px;
+			border: none;
+			border-radius: 6px;
+			padding: 9px;
+			background: #1f2937;
+			color: #ffffff;
+			font-size: 0.88rem;
+			cursor: pointer;
+			width: 100%;
+		}
+
+		.card-buy:hover {
+			background: #374151;
+		}
+
+		.no-results {
+			grid-column: 1 / -1;
+			text-align: center;
+			color: #9ca3af;
+			padding: 50px 0;
+		}
+
+		@media (max-width: 640px) {
+			.sidebar { display: none; }
+			.brand { font-size: 1rem; }
+		}
+	</style>
+</head>
+<body>
+
+	<header>
+		<div class="brand">&#127978; Marketly</div>
+
+		<div class="search-bar">
+			<input type="text" id="search-input" placeholder="Search listings...">
+			<button type="button" onclick="applyFilters()">&#128269;</button>
+		</div>
+
+		<div class="header-right">
+			<div class="profile-wrap">
+				<div class="profile-icon" id="profile-initial">?</div>
+				<span id="profile-name">Guest</span>
+			</div>
+			<button class="header-btn" type="button" onclick="window.location.href='option.html'">&#8592; Back</button>
+		</div>
+	</header>
+
+	<div class="page-body">
+
+		<aside class="sidebar">
+			<h3>Categories</h3>
+			<ul id="category-list">
+				<li><button type="button" class="active" data-cat="all" onclick="selectCategory(this)">All Listings</button></li>
+				<li><button type="button" data-cat="electronics" onclick="selectCategory(this)">Electronics</button></li>
+				<li><button type="button" data-cat="clothing" onclick="selectCategory(this)">Clothing &amp; Accessories</button></li>
+				<li><button type="button" data-cat="furniture" onclick="selectCategory(this)">Furniture &amp; Home</button></li>
+				<li><button type="button" data-cat="vehicles" onclick="selectCategory(this)">Vehicles</button></li>
+				<li><button type="button" data-cat="appliances" onclick="selectCategory(this)">Appliances</button></li>
+				<li><button type="button" data-cat="sports" onclick="selectCategory(this)">Sports &amp; Outdoors</button></li>
+				<li><button type="button" data-cat="books" onclick="selectCategory(this)">Books &amp; Media</button></li>
+				<li><button type="button" data-cat="toys" onclick="selectCategory(this)">Toys &amp; Games</button></li>
+				<li><button type="button" data-cat="other" onclick="selectCategory(this)">Other</button></li>
+			</ul>
+
+			<h3>Condition</h3>
+			<ul id="condition-list">
+				<li><button type="button" class="active" data-cond="all" onclick="selectCondition(this)">Any Condition</button></li>
+				<li><button type="button" data-cond="New" onclick="selectCondition(this)">New</button></li>
+				<li><button type="button" data-cond="Like New" onclick="selectCondition(this)">Like New</button></li>
+				<li><button type="button" data-cond="Good" onclick="selectCondition(this)">Good</button></li>
+				<li><button type="button" data-cond="Fair" onclick="selectCondition(this)">Fair</button></li>
+				<li><button type="button" data-cond="Poor" onclick="selectCondition(this)">Poor</button></li>
+			</ul>
+		</aside>
+
+		<main class="main">
+			<div class="results-bar" id="results-bar">Showing all listings</div>
+			<div class="grid" id="listing-grid"></div>
+		</main>
+
+	</div>
+
+	<script>
+		var listings = [];
+		var activeCategory = 'all';
+		var activeCondition = 'all';
+
+		/*
+		 * ── DATA SOURCE ──────────────────────────────────────────────────
+		 * Currently loads placeholder data so the UI works without a backend.
+		 *
+		 * TO CONNECT A DATABASE: replace the body of loadListings() with a
+		 * fetch call to your API endpoint, e.g.:
+		 *
+		 *   function loadListings() {
+		 *     setLoadingState(true);
+		 *     fetch('/api/listings')
+		 *       .then(function(res) { return res.json(); })
+		 *       .then(function(data) {
+		 *         listings = data;           // data must be an array of listing objects
+		 *         setLoadingState(false);
+		 *         applyFilters();
+		 *       })
+		 *       .catch(function() {
+		 *         setLoadingState(false);
+		 *         showError('Failed to load listings. Please try again.');
+		 *       });
+		 *   }
+		 *
+		 * Each listing object from the API should have:
+		 *   id, title, category, condition, price, location, imageUrl (replaces icon)
+		 * ─────────────────────────────────────────────────────────────────
+		 */
+		function loadListings() {
+			listings = [
+				{ id: 1,  title: 'Samsung 55" 4K Smart TV',           category: 'electronics', condition: 'Like New', price: 7500,   location: 'Cape Town, WC',      icon: '📺' },
+				{ id: 2,  title: 'iPhone 13 Pro Max 256GB',            category: 'electronics', condition: 'Good',     price: 12500,  location: 'Johannesburg, GP',   icon: '📱' },
+				{ id: 3,  title: 'Sony WH-1000XM5 Headphones',         category: 'electronics', condition: 'New',      price: 3800,   location: 'Durban, KZN',        icon: '🎧' },
+				{ id: 4,  title: 'Nike Air Max 270 (Size 10)',          category: 'clothing',    condition: 'Good',     price: 850,    location: 'Pretoria, GP',       icon: '👟' },
+				{ id: 5,  title: "Levi's 501 Jeans (32x32)",           category: 'clothing',    condition: 'Like New', price: 450,    location: 'Cape Town, WC',      icon: '👖' },
+				{ id: 6,  title: 'Winter Puffer Jacket (Large)',        category: 'clothing',    condition: 'Fair',     price: 320,    location: 'Bloemfontein, FS',   icon: '🧥' },
+				{ id: 7,  title: 'Solid Oak Dining Table (6 Seater)',  category: 'furniture',   condition: 'Good',     price: 5500,   location: 'Port Elizabeth, EC', icon: '🪑' },
+				{ id: 8,  title: 'Double Bed Frame + Mattress',         category: 'furniture',   condition: 'Fair',     price: 2200,   location: 'Johannesburg, GP',   icon: '🛏️' },
+				{ id: 9,  title: 'Bookshelf (5 Tier)',                  category: 'furniture',   condition: 'Good',     price: 650,    location: 'Cape Town, WC',      icon: '📚' },
+				{ id: 10, title: 'Toyota Corolla 2018 (Manual)',        category: 'vehicles',    condition: 'Good',     price: 185000, location: 'Pretoria, GP',       icon: '🚗' },
+				{ id: 11, title: 'Suzuki Scooter 125cc',                category: 'vehicles',    condition: 'Fair',     price: 18000,  location: 'Durban, KZN',        icon: '🛵' },
+				{ id: 12, title: 'Samsung Front Loader Washing Machine',category: 'appliances',  condition: 'Good',     price: 3200,   location: 'Cape Town, WC',      icon: '🫧' },
+				{ id: 13, title: 'KIC Double-Door Fridge',              category: 'appliances',  condition: 'Like New', price: 4800,   location: 'Johannesburg, GP',   icon: '🧊' },
+				{ id: 14, title: 'KitchenAid Stand Mixer',              category: 'appliances',  condition: 'New',      price: 5200,   location: 'Stellenbosch, WC',   icon: '🍳' },
+				{ id: 15, title: 'Mountain Bike (26")',                  category: 'sports',      condition: 'Good',     price: 2800,   location: 'Cape Town, WC',      icon: '🚵' },
+				{ id: 16, title: 'Gym Bench + Barbell Set',             category: 'sports',      condition: 'Fair',     price: 1500,   location: 'Randburg, GP',       icon: '🏋️' },
+				{ id: 17, title: 'Harry Potter Complete Box Set',        category: 'books',       condition: 'Like New', price: 380,    location: 'Cape Town, WC',      icon: '📖' },
+				{ id: 18, title: 'PS5 with 2 Controllers',              category: 'electronics', condition: 'Good',     price: 9500,   location: 'Johannesburg, GP',   icon: '🎮' },
+				{ id: 19, title: 'LEGO Technic Set (Sealed)',            category: 'toys',        condition: 'New',      price: 1200,   location: 'Durban, KZN',        icon: '🧱' },
+				{ id: 20, title: 'Vintage Desk Lamp',                   category: 'other',       condition: 'Good',     price: 850,    location: 'Stellenbosch, WC',   icon: '💡' }
+			];
+			applyFilters();
+		}
+
+		/* ── Load user name from localStorage ── */
+		(function loadUser() {
+			try {
+				var users = JSON.parse(localStorage.getItem('fakeUsers') || '[]');
+				if (users.length > 0) {
+					var lastUser = users[users.length - 1];
+					if (lastUser && lastUser.name) {
+						var firstName = lastUser.name.split(' ')[0];
+						document.getElementById('profile-name').textContent = firstName;
+						document.getElementById('profile-initial').textContent = firstName.charAt(0).toUpperCase();
+					}
+				}
+			} catch (e) {}
+		})();
+
+		function formatPrice(amount) {
+			return 'R' + amount.toLocaleString('en-ZA');
+		}
+
+		function renderListings(items) {
+			var grid = document.getElementById('listing-grid');
+			var bar  = document.getElementById('results-bar');
+			grid.innerHTML = '';
+
+			if (items.length === 0) {
+				bar.textContent = 'No listings found';
+				grid.innerHTML = '<div class="no-results">No listings match your search. Try a different keyword or category.</div>';
+				return;
+			}
+
+			bar.textContent = 'Showing ' + items.length + ' listing' + (items.length !== 1 ? 's' : '');
+
+			items.forEach(function (item) {
+				var card = document.createElement('div');
+				card.className = 'card';
+				card.innerHTML =
+					'<div class="card-img">' + item.icon + '</div>' +
+					'<div class="card-body">' +
+						'<div class="card-title" title="' + item.title + '">' + item.title + '</div>' +
+						'<div class="card-location">&#128205; ' + item.location + '</div>' +
+						'<div class="card-condition">Condition: ' + item.condition + '</div>' +
+						'<div class="card-price">' + formatPrice(item.price) + '</div>' +
+						'<button class="card-buy" type="button" onclick="buyItem(' + item.id + ')">Buy Now</button>' +
+					'</div>';
+				grid.appendChild(card);
+			});
+		}
+
+		function applyFilters() {
+			var query = document.getElementById('search-input').value.trim().toLowerCase();
+			var filtered = listings.filter(function (item) {
+				var matchCat    = activeCategory === 'all' || item.category === activeCategory;
+				var matchCond   = activeCondition === 'all' || item.condition === activeCondition;
+				var matchSearch = query === '' || item.title.toLowerCase().indexOf(query) !== -1 || item.location.toLowerCase().indexOf(query) !== -1;
+				return matchCat && matchCond && matchSearch;
+			});
+			renderListings(filtered);
+		}
+
+		function selectCategory(btn) {
+			document.querySelectorAll('#category-list button').forEach(function (b) { b.classList.remove('active'); });
+			btn.classList.add('active');
+			activeCategory = btn.dataset.cat;
+			applyFilters();
+		}
+
+		function selectCondition(btn) {
+			document.querySelectorAll('#condition-list button').forEach(function (b) { b.classList.remove('active'); });
+			btn.classList.add('active');
+			activeCondition = btn.dataset.cond;
+			applyFilters();
+		}
+
+		function buyItem(id) {
+			var item = listings.find(function (l) { return l.id === id; });
+			if (!item) return;
+			var params = new URLSearchParams({
+				itemName:    item.title,
+				subtotal:    item.price,
+				deliveryFee: 60,
+				total:       item.price + 60
+			});
+			window.location.href = 'buyerInfo.html?' + params.toString();
+		}
+
+		document.getElementById('search-input').addEventListener('keydown', function (e) {
+			if (e.key === 'Enter') applyFilters();
+		});
+
+		/* ── Kick off: swap loadListings() for an API fetch when backend is ready ── */
+		loadListings();
+	</script>
+
+</body>
+</html>
