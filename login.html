@@ -4,20 +4,117 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #f4f4f4, #e4ecf3);
+            padding: 16px;
+        }
+
+        .form-container {
+            width: 100%;
+            max-width: 420px;
+            background: #ffffff;
+            border-radius: 10px;
+            padding: 28px;
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.12);
+        }
+
+        h2 {
+            color: #1f2937;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 14px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            background: #f8fafc;
+        }
+
+        button[type="submit"] {
+            width: 100%;
+            border: none;
+            border-radius: 6px;
+            padding: 12px;
+            background: #0f766e;
+            color: #ffffff;
+            font-size: 0.95rem;
+            cursor: pointer;
+        }
+
+        .switch-link {
+            margin-top: 14px;
+            font-size: 0.9rem;
+            color: #475569;
+            text-align: center;
+        }
+
+        .switch-link a {
+            color: #0f766e;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #1f2937;
+            color: #ffffff;
+            padding: 12px 14px;
+            border-radius: 8px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(-8px);
+            transition: opacity 0.2s ease, transform 0.2s ease;
+            max-width: 320px;
+            font-size: 0.9rem;
+            z-index: 999;
+        }
+
+        .toast.show {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+        }
+
+        .toast.error {
+            background: #991b1b;
+        }
+    </style>
 </head>
 <body>
 
     <div class="form-container">
         <h2>Login</h2>
 
-        <form action="" method="POST">
+        <form id="login-form" action="" method="POST">
 
             <div class="form-group">
-                <input type="email" name="email" placeholder="Enter Email" required>
+                <input type="email" id="email" name="email" placeholder="Enter Email" required>
             </div>
 
             <div class="form-group">
-                <input type="password" name="password" placeholder="Enter Password" required>
+                <input type="password" id="password" name="password" placeholder="Enter Password" required>
             </div>
 
             <div class="switch-link">
@@ -32,6 +129,52 @@
             <a href="register.html">Register</a>
         </div>
     </div>
+
+    <div id="toast" class="toast"></div>
+
+    <script>
+        const loginForm = document.getElementById('login-form');
+        const toast = document.getElementById('toast');
+
+        function showToast(message, type) {
+            toast.textContent = message;
+            toast.className = 'toast show' + (type ? ' ' + type : '');
+            setTimeout(function () {
+                toast.className = 'toast';
+            }, 3200);
+        }
+
+        function getUsers() {
+            const raw = localStorage.getItem('fakeUsers');
+            if (!raw) {
+                return [];
+            }
+            try {
+                return JSON.parse(raw);
+            } catch (error) {
+                return [];
+            }
+        }
+
+        loginForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const email = document.getElementById('email').value.trim().toLowerCase();
+            const password = document.getElementById('password').value;
+            const users = getUsers();
+
+            const match = users.find(function (user) {
+                return user.email === email && user.password === password;
+            });
+
+            if (match) {
+                window.location.href = 'option.html';
+                return;
+            }
+
+            showToast('Incorrect details. Try again or register an account if you are new.', 'error');
+        });
+    </script>
 
 </body>
 </html>

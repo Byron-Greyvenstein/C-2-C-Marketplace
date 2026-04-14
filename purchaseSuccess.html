@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Purchase Successful</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(130deg, #ecfdf5, #f0f9ff);
+            padding: 20px;
+        }
+
+        .success-card {
+            width: 100%;
+            max-width: 560px;
+            background: #ffffff;
+            border-radius: 14px;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+            padding: 32px;
+            text-align: center;
+        }
+
+        .tick {
+            width: 76px;
+            height: 76px;
+            border-radius: 50%;
+            margin: 0 auto 18px;
+            display: grid;
+            place-items: center;
+            background-color: #0f766e;
+            color: #ffffff;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        h1 {
+            color: #064e3b;
+            margin-bottom: 8px;
+            font-size: 1.8rem;
+        }
+
+        p {
+            color: #475569;
+            margin-bottom: 8px;
+            line-height: 1.45;
+        }
+
+        .order-id {
+            margin-top: 8px;
+            color: #0f172a;
+            font-weight: bold;
+        }
+
+        .summary-box {
+            margin-top: 18px;
+            text-align: left;
+            background: #f8fafc;
+            border: 1px solid #dbe5ef;
+            border-radius: 10px;
+            padding: 14px;
+        }
+
+        .summary-title {
+            font-size: 1rem;
+            color: #0f172a;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 6px 0;
+            color: #334155;
+            font-size: 0.94rem;
+        }
+
+        .summary-row.total {
+            border-top: 1px solid #dbe5ef;
+            margin-top: 6px;
+            padding-top: 10px;
+            font-weight: bold;
+            color: #0f172a;
+        }
+
+        .actions {
+            margin-top: 24px;
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            border: none;
+            border-radius: 8px;
+            padding: 11px 16px;
+            font-size: 0.95rem;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background-color: #0f766e;
+            color: #ffffff;
+        }
+
+        .btn-secondary {
+            background-color: #1f2937;
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+    <section class="success-card">
+        <div class="tick">✓</div>
+        <h1>Purchase Successful</h1>
+        <p>Your payment has been processed and your order is confirmed.</p>
+        <p>We will send delivery updates as your order is prepared.</p>
+        <p class="order-id" id="order-id">Order #SA-2026-0001</p>
+
+        <div class="summary-box">
+            <div class="summary-title">Order Summary</div>
+            <div class="summary-row"><span>Item</span><strong id="sum-item">Vintage Desk Lamp</strong></div>
+            <div class="summary-row"><span>Delivery Type</span><strong id="sum-delivery-type">General Delivery</strong></div>
+            <div class="summary-row"><span>Address</span><strong id="sum-address">Not provided</strong></div>
+            <div class="summary-row"><span>Subtotal</span><strong id="sum-subtotal">R850.00</strong></div>
+            <div class="summary-row"><span>Delivery Fee</span><strong id="sum-delivery-fee">R60.00</strong></div>
+            <div class="summary-row total"><span>Total Paid</span><strong id="sum-total">R910.00</strong></div>
+        </div>
+
+        <div class="actions">
+            <a class="btn btn-primary" href="buying.html">Continue Shopping</a>
+            <a class="btn btn-secondary" href="option.html">Go to Home</a>
+        </div>
+    </section>
+
+    <script>
+        // Generate a simple simulated order number for each successful purchase view.
+        const randomPart = Math.floor(Math.random() * 9000) + 1000;
+        document.getElementById('order-id').textContent = 'Order #SA-2026-' + randomPart;
+
+        const params = new URLSearchParams(window.location.search);
+        const itemName = params.get('itemName') || 'Vintage Desk Lamp';
+        const deliveryTypeRaw = params.get('deliveryType') || 'general';
+        const deliveryAddress = params.get('deliveryAddress') || 'Not provided';
+        const subtotal = parseFloat(params.get('subtotal') || '850');
+        const deliveryFee = parseFloat(params.get('deliveryFee') || '60');
+        const total = parseFloat(params.get('total') || String(subtotal + deliveryFee));
+
+        function formatCurrency(amount) {
+            return 'R' + amount.toFixed(2);
+        }
+
+        function labelDelivery(type) {
+            if (type === 'express') {
+                return 'Express Delivery';
+            }
+            return 'General Delivery';
+        }
+
+        document.getElementById('sum-item').textContent = itemName;
+        document.getElementById('sum-delivery-type').textContent = labelDelivery(deliveryTypeRaw);
+        document.getElementById('sum-address').textContent = deliveryAddress;
+        document.getElementById('sum-subtotal').textContent = formatCurrency(subtotal);
+        document.getElementById('sum-delivery-fee').textContent = formatCurrency(deliveryFee);
+        document.getElementById('sum-total').textContent = formatCurrency(total);
+    </script>
+</body>
+</html>

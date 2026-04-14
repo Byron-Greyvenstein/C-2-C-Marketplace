@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Buyer Information</title>
+	<style>
+		* {
+			box-sizing: border-box;
+			margin: 0;
+			padding: 0;
+		}
+
+		body {
+			font-family: Arial, sans-serif;
+			min-height: 100vh;
+			background: linear-gradient(135deg, #f5f7fa, #e4ecf3);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			padding: 20px;
+		}
+
+		.checkout-card {
+			width: 100%;
+			max-width: 680px;
+			background: #ffffff;
+			border-radius: 12px;
+			box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+			padding: 28px;
+		}
+
+		.checkout-card h1 {
+			font-size: 1.7rem;
+			margin-bottom: 8px;
+			color: #1f2937;
+		}
+
+		.checkout-card p {
+			color: #6b7280;
+			margin-bottom: 22px;
+		}
+
+		.section-title {
+			margin: 22px 0 12px;
+			font-size: 1.05rem;
+			color: #111827;
+		}
+
+		.form-group {
+			margin-bottom: 14px;
+		}
+
+		label {
+			display: block;
+			margin-bottom: 6px;
+			color: #374151;
+			font-size: 0.92rem;
+			font-weight: bold;
+		}
+
+		input,
+		select,
+		textarea {
+			width: 100%;
+			border: 1px solid #d1d5db;
+			border-radius: 8px;
+			padding: 10px 12px;
+			font-size: 0.95rem;
+			background-color: #f9fafb;
+			color: #111827;
+		}
+
+		textarea {
+			min-height: 90px;
+			resize: vertical;
+		}
+
+		.row {
+			display: flex;
+			gap: 12px;
+		}
+
+		.row .form-group {
+			flex: 1;
+		}
+
+		.hint {
+			font-size: 0.82rem;
+			color: #6b7280;
+			margin-top: 5px;
+		}
+
+		.summary-box {
+			background: #f8fafc;
+			border: 1px solid #dbe5ef;
+			border-radius: 10px;
+			padding: 14px;
+			margin-bottom: 16px;
+		}
+
+		.summary-row {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding: 7px 0;
+			font-size: 0.94rem;
+			color: #334155;
+		}
+
+		.summary-row.total {
+			border-top: 1px solid #dbe5ef;
+			margin-top: 6px;
+			padding-top: 10px;
+			font-weight: bold;
+			color: #0f172a;
+		}
+
+		.button-row {
+			display: flex;
+			gap: 10px;
+			margin-top: 20px;
+			flex-wrap: wrap;
+		}
+
+		.btn {
+			border: none;
+			border-radius: 8px;
+			padding: 12px 16px;
+			font-size: 0.96rem;
+			cursor: pointer;
+			transition: opacity 0.15s ease, transform 0.15s ease;
+		}
+
+		.btn:hover {
+			opacity: 0.95;
+			transform: translateY(-1px);
+		}
+
+		.btn-primary {
+			background-color: #0f766e;
+			color: #ffffff;
+			flex: 1;
+		}
+
+		.btn-secondary {
+			background-color: #1f2937;
+			color: #ffffff;
+		}
+
+		@media (max-width: 640px) {
+			.row {
+				flex-direction: column;
+				gap: 0;
+			}
+		}
+	</style>
+</head>
+<body>
+	<div class="checkout-card">
+		<h1>Complete Your Purchase</h1>
+		<p>Please fill in your location, delivery preference, and card details.</p>
+
+		<form id="buyer-info-form" action="purchaseSuccess.html" method="GET">
+			<h2 class="section-title">Order Summary</h2>
+
+			<div class="summary-box">
+				<div class="summary-row"><span>Item</span><strong id="summary-item">Vintage Desk Lamp</strong></div>
+				<div class="summary-row"><span>Subtotal</span><strong id="summary-subtotal">R850.00</strong></div>
+				<div class="summary-row"><span>Delivery Fee</span><strong id="summary-delivery">R60.00</strong></div>
+				<div class="summary-row total"><span>Total</span><strong id="summary-total">R910.00</strong></div>
+			</div>
+
+			<input type="hidden" id="item-name-input" name="itemName" value="Vintage Desk Lamp">
+			<input type="hidden" id="subtotal-input" name="subtotal" value="850">
+			<input type="hidden" id="delivery-fee-input" name="deliveryFee" value="60">
+			<input type="hidden" id="total-input" name="total" value="910">
+
+			<h2 class="section-title">Buyer Location</h2>
+
+			<div class="form-group">
+				<label for="buyer-location">Your Location</label>
+				<input id="buyer-location" name="buyerLocation" type="text" placeholder="City, Province" required>
+			</div>
+
+			<div class="form-group">
+				<label for="delivery-option">Delivery Type</label>
+				<select id="delivery-option" name="deliveryType" required>
+					<option value="">Select delivery option</option>
+					<option value="express">Express Delivery (1 to 2 days)</option>
+					<option value="general">General Delivery (3 to 7 days)</option>
+				</select>
+			</div>
+
+			<div class="form-group">
+				<label for="delivery-address">Delivery Address</label>
+				<textarea id="delivery-address" name="deliveryAddress" placeholder="House number, street, suburb, city, postal code" required></textarea>
+			</div>
+
+			<h2 class="section-title">Card Details</h2>
+
+			<div class="form-group">
+				<label for="card-name">Cardholder Name</label>
+				<input id="card-name" name="cardName" type="text" placeholder="Full name on card" required>
+			</div>
+
+			<div class="form-group">
+				<label for="card-number">Card Number</label>
+				<input id="card-number" name="cardNumber" type="text" inputmode="numeric" maxlength="19" placeholder="1234 5678 9012 3456" required>
+				<div class="hint">Use 16 digits. Spaces are allowed.</div>
+			</div>
+
+			<div class="row">
+				<div class="form-group">
+					<label for="expiry">Expiry Date</label>
+					<input id="expiry" name="expiryDate" type="text" inputmode="numeric" maxlength="5" placeholder="MM/YY" required>
+				</div>
+
+				<div class="form-group">
+					<label for="cvv">CVV</label>
+					<input id="cvv" name="cvv" type="password" inputmode="numeric" maxlength="4" placeholder="123" required>
+				</div>
+			</div>
+
+			<div class="button-row">
+				<button class="btn btn-primary" type="submit">Complete Purchase</button>
+				<button class="btn btn-secondary" type="button" onclick="window.location.href='buying.html'">Back to Buying</button>
+			</div>
+		</form>
+	</div>
+
+	<script>
+		/* ── Read item details passed from marketplace ── */
+		var urlParams = new URLSearchParams(window.location.search);
+		var passedItem     = urlParams.get('itemName')    || 'Vintage Desk Lamp';
+		var passedSubtotal = parseFloat(urlParams.get('subtotal') || '850');
+
+		/* Pre-fill hidden inputs and summary item name */
+		document.getElementById('item-name-input').value   = passedItem;
+		document.getElementById('subtotal-input').value    = String(passedSubtotal);
+		document.getElementById('summary-item').textContent = passedItem;
+
+		const form = document.getElementById('buyer-info-form');
+		const deliveryOption = document.getElementById('delivery-option');
+		const cardNumberInput = document.getElementById('card-number');
+		const expiryInput = document.getElementById('expiry');
+		const cvvInput = document.getElementById('cvv');
+		const subtotalValue = passedSubtotal;
+		const summarySubtotal = document.getElementById('summary-subtotal');
+		const summaryDelivery = document.getElementById('summary-delivery');
+		const summaryTotal = document.getElementById('summary-total');
+		const deliveryFeeInput = document.getElementById('delivery-fee-input');
+		const totalInput = document.getElementById('total-input');
+
+		function formatCurrency(amount) {
+			return 'R' + amount.toFixed(2);
+		}
+
+		function getDeliveryFee(option) {
+			if (option === 'express') {
+				return 120;
+			}
+			return 60;
+		}
+
+		function updateSummaryFromDelivery() {
+			const fee = getDeliveryFee(deliveryOption.value);
+			const total = subtotalValue + fee;
+			summarySubtotal.textContent = formatCurrency(subtotalValue);
+			summaryDelivery.textContent = formatCurrency(fee);
+			summaryTotal.textContent = formatCurrency(total);
+			deliveryFeeInput.value = String(fee);
+			totalInput.value = String(total);
+		}
+
+		deliveryOption.addEventListener('change', updateSummaryFromDelivery);
+		updateSummaryFromDelivery();
+
+		cardNumberInput.addEventListener('input', function () {
+			let digits = cardNumberInput.value.replace(/\D/g, '').slice(0, 16);
+			cardNumberInput.value = digits.replace(/(.{4})/g, '$1 ').trim();
+		});
+
+		expiryInput.addEventListener('input', function () {
+			let digits = expiryInput.value.replace(/\D/g, '').slice(0, 4);
+			if (digits.length >= 3) {
+				expiryInput.value = digits.slice(0, 2) + '/' + digits.slice(2);
+			} else {
+				expiryInput.value = digits;
+			}
+		});
+
+		cvvInput.addEventListener('input', function () {
+			cvvInput.value = cvvInput.value.replace(/\D/g, '').slice(0, 4);
+		});
+
+		form.addEventListener('submit', function (event) {
+			const cardDigits = cardNumberInput.value.replace(/\s/g, '');
+			const expiry = expiryInput.value;
+			const cvv = cvvInput.value;
+
+			if (cardDigits.length !== 16) {
+				event.preventDefault();
+				alert('Please enter a valid 16-digit card number.');
+				return;
+			}
+
+			const expiryMatch = expiry.match(/^(0[1-9]|1[0-2])\/(\d{2})$/);
+			if (!expiryMatch) {
+				event.preventDefault();
+				alert('Please enter a valid expiry date in MM/YY format.');
+				return;
+			}
+
+			if (cvv.length < 3 || cvv.length > 4) {
+				event.preventDefault();
+				alert('Please enter a valid CVV (3 or 4 digits).');
+			}
+		});
+	</script>
+</body>
+</html>

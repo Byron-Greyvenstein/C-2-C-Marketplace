@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Market</title>
+	<style>
+		* {
+			box-sizing: border-box;
+			margin: 0;
+			padding: 0;
+		}
+
+		body {
+			font-family: Arial, sans-serif;
+			min-height: 100vh;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			background: linear-gradient(135deg, #f4f4f4, #e8ecef);
+			padding: 16px;
+		}
+
+		.option-card {
+			width: 100%;
+			max-width: 500px;
+			background-color: #ffffff;
+			border-radius: 10px;
+			box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+			padding: 28px;
+			text-align: center;
+		}
+
+		.option-card h1 {
+			font-size: 1.7rem;
+			color: #222;
+			margin-bottom: 8px;
+		}
+
+		.option-card p {
+			color: #666;
+			margin-bottom: 24px;
+		}
+
+		.button-row {
+			display: flex;
+			gap: 12px;
+			flex-wrap: wrap;
+			justify-content: center;
+		}
+
+		.choice-btn {
+			min-width: 180px;
+			border: none;
+			border-radius: 6px;
+			padding: 12px 18px;
+			color: #fff;
+			font-size: 1rem;
+			cursor: pointer;
+			transition: transform 0.15s ease, opacity 0.15s ease;
+		}
+
+		.choice-btn:hover {
+			transform: translateY(-1px);
+			opacity: 0.95;
+		}
+
+		.buy-btn {
+			background-color: #0f766e;
+		}
+
+		.sell-btn {
+			background-color: #1f2937;
+		}
+
+		.logout-wrap {
+			margin-top: 16px;
+		}
+
+		.logout-btn {
+			width: 100%;
+			border: 1px solid #cbd5e1;
+			border-radius: 6px;
+			padding: 10px 14px;
+			background: #ffffff;
+			color: #334155;
+			font-size: 0.95rem;
+			cursor: pointer;
+		}
+
+		.logout-btn:hover {
+			background: #f8fafc;
+		}
+	</style>
+</head>
+<body>
+	<div class="option-card">
+		<h1>What would you like to do?</h1>
+		<p>Choose whether you want to purchase an item or sell one.</p>
+
+		<div class="button-row">
+			<button class="choice-btn buy-btn" type="button" onclick="window.location.href='buying.html'">Purchase</button>
+			<button class="choice-btn sell-btn" type="button" onclick="window.location.href='selling.html'">Sell</button>
+		</div>
+
+		<div class="logout-wrap">
+			<button class="logout-btn" type="button" onclick="logoutUser()">Logout</button>
+		</div>
+	</div>
+
+	<script>
+		function logoutUser() {
+			localStorage.removeItem('fakeSessionActive');
+			localStorage.removeItem('fakeCurrentUser');
+			window.location.href = 'login.html';
+		}
+	</script>
+</body>
+</html>
